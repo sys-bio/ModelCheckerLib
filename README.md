@@ -1,5 +1,13 @@
 # ModelCheckerLib
 
+<table style="width:100%">
+  <tr>
+    <td><img alt="Licence" src="https://img.shields.io/badge/License-MIT-yellowgreen"></td>
+    <td><img alt="Language" src="https://img.shields.io/badge/Delphi-13%20%2F%20RAD%20Studio%2037.0-blue.svg"></td>
+    <td><img alt="Dependencies" src="https://img.shields.io/badge/Dependencies-RTL%20only-lightgrey"></td>
+  </tr>
+</table>
+
 **A static and behavioural checker for the equations inside a systems-biology model.**
 Written in Delphi, RTL-only, with no GUI and no native dependencies.
 
@@ -354,6 +362,10 @@ Delphi 13 / RAD Studio 37.0. From this folder, after sourcing `rsvars.bat`:
 dcc64 -B -NUdcu ModelCheckerLib_Project.dpr
 ```
 
+The `dcu\` directory must exist — `dcc64` writes into it but will not create it, failing with
+`F2039 Could not create output file` if it is missing. It is carried in the repository by
+`dcu\.gitkeep`, since its contents are ignored.
+
 **`-NUdcu` is not optional.** Without it `dcc64` writes its DCUs beside the sources, and that
 directory is on the unit search path of hosts that consume this library as source — so the next
 host build finds compiled units there and uses them instead of recompiling the `.pas`. The
@@ -443,6 +455,12 @@ of the check, the folder names the library.
 The full status table, measured figures, and — more usefully — the deviations and findings,
 including every place the design had to give, live in `specification_rate_law_checker_iridium.md`
 in the Iridium repository. Read its §18 before changing engine behaviour.
+
+---
+
+## Licence
+
+MIT — see [LICENSE](LICENSE). © 2022 UW Sauro Lab.
 
 ---
 
