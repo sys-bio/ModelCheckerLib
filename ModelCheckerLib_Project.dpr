@@ -1,22 +1,44 @@
 ﻿program ModelCheckerLib_Project;
 
-{ Console harness for the rate law checker.
+{ Console harness for the model checker. See README.md for the library itself.
 
-    ModelCheckerLib_Project              run everything
-    ModelCheckerLib_Project -list        list the model corpus and why each case exists
-    ModelCheckerLib_Project -show NAME   render one model case through IModelSource
+  With no arguments it runs the whole suite -- canonicalisation pairs, registry
+  loading and layering, role binding, then the model corpus -- and ends with a
+  pass/fail line. Everything else selects one part of that, or one case:
+
+    ModelCheckerLib_Project              the whole suite
     ModelCheckerLib_Project -canon       canonicalisation pairs only
-    ModelCheckerLib_Project -expr EXPR   parse one expression and dump both trees
+    ModelCheckerLib_Project -registry    registry loading and layering only
+    ModelCheckerLib_Project -bind        role binding over every corpus case
+    ModelCheckerLib_Project -bind NAME   ...for one case: which law each
+                                         candidate binds to, and how far off
+    ModelCheckerLib_Project -list        the corpus, and why each case exists
+    ModelCheckerLib_Project -show NAME   one case rendered through IModelSource
+    ModelCheckerLib_Project -check NAME  one case checked, in full
+    ModelCheckerLib_Project -laws        every registered law, and whether it
+                                         validates against its own invariants
+    ModelCheckerLib_Project -coverage    the mutation matrix, per law
+    ModelCheckerLib_Project -stress      an alias for -coverage
+    ModelCheckerLib_Project -expr EXPR   parse one expression, dump both trees
 
   The library itself depends on nothing but the RTL -- no FMX, no libantimony,
   no libRoadRunner. That constraint is what keeps it testable here and reusable
   later, and it is the reason this project exists separately from Iridium at
-  all: Iridium has no test suite, and the mutation harness that will measure
-  the static engine's coverage cannot live there.
+  all: Iridium has no test suite, and the mutation harness that measures the
+  static engine's coverage cannot live there.
 
-  Model cases report PENDING until the static engine exists (M5). Reporting
-  them as passing before anything can fail would be worse than not running
-  them. The canonicalisation pairs, by contrast, are real tests now. }
+  Cases compare diagnostic CODES, not message text, so wording can keep
+  improving without breaking tests -- and a code not listed by a case fails it,
+  so a rule cannot quietly gain a diagnostic without someone noticing.
+
+  -coverage is the measurement that matters most and the one to run after any
+  engine change. It mutates each law's own canonical expression in a known way
+  and asks whether the engine names the break correctly, so the mutation kind
+  IS the expected defect class and nobody gets to decide after the fact that
+  whatever came out was close enough. Note that a green suite here is NOT
+  evidence the checker is ready: these cases are expressions written as laws,
+  real models are SBML, and the two disagree about what a rate law looks like.
+  The corpus stayed green through fixes that made the real numbers worse. }
 
 {$APPTYPE CONSOLE}
 
